@@ -15,7 +15,12 @@ namespace MYAcademy_PortfolioProject.Context
         public DbSet<Message> Messages { get; set; }   
         public DbSet<Contact> Contacts { get; set; } 
         public DbSet<HeroSection> HeroSections { get; set; } 
+        public DbSet<Category> Categories { get; set; } 
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<SkillCategory> SkillCategories { get; set; }
     }
     //Çoğul olanlar Sql deki tbaloları yalın olanlar entityleri temsil ediyor.
 }
 //ovveride
+ 

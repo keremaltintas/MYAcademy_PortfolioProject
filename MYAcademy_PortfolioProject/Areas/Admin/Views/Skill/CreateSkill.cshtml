@@ -1,0 +1,216 @@
+﻿@model MYAcademy_PortfolioProject.Entities.Skill
+
+@{
+    ViewData["Title"] = "Yeni Yetenek Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Yeni Yetenek Ekle</h3>
+        <p class="text-muted mb-0">
+            Portföyünüzde sergilemek istediğiniz yeteneği ekleyin.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3">
+
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-lightning-charge me-2 text-primary"></i>
+                Yetenek Bilgileri
+            </h5>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="Skill"
+                  asp-action="CreateSkill"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row g-4">
+
+
+                    <div class="col-md-6">
+                        <label asp-for="SkillName" class="form-label fw-semibold">
+                            Yetenek Adı
+                        </label>
+                        <input asp-for="SkillName"
+                               class="form-control"
+                               placeholder="Örn: C#, ASP.NET Core, SQL Server" />
+                        <span asp-validation-for="SkillName"
+                              class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="SkillCategoryId" class="form-label">
+                            Yetenek Kategorisi
+                        </label>
+
+                        <select asp-for="SkillCategoryId"
+                                class="form-select"
+                                required>
+
+                            <option value="">Kategori Seçiniz</option>
+
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.SkillCategoryId">
+                                    @category.CategoryName
+                                </option>
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="SkillCategoryId"
+                              class="text-danger"></span>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="SkillValue" class="form-label fw-semibold">
+                            Yetenek Seviyesi (%)
+                        </label>
+                        <input asp-for="SkillValue"
+                               type="number"
+                               min="0"
+                               max="100"
+                               class="form-control"
+                               id="skillValue"
+                               placeholder="Örn: 85" />
+                        <span asp-validation-for="SkillValue"
+                              class="text-danger small"></span>
+                        <small class="text-muted">
+                            0 ile 100 arasında bir değer giriniz.
+                        </small>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="ExperienceYear" class="form-label fw-semibold">
+                            Deneyim Süresi (Yıl)
+                        </label>
+                        <input asp-for="ExperienceYear"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               placeholder="Örn: 3" />
+                        <span asp-validation-for="ExperienceYear"
+                              class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="SkillColor" class="form-label fw-semibold">
+                            Yetenek Rengi
+                        </label>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <input asp-for="SkillColor"
+                                   type="color"
+                                   class="form-control form-control-color"
+                                   id="skillColor"
+                                   value="#8276D9" />
+
+                            <span class="text-muted small">
+                                İlerleme çubuğunda ve ikonda kullanılacak renk.
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="SkillIcon" class="form-label fw-semibold">
+                            İkon Sınıfı
+                        </label>
+                        <input asp-for="SkillIcon"
+                               class="form-control"
+                               id="skillIcon"
+                               placeholder="Örn: bi bi-code-slash" />
+                        <small class="text-muted">
+                            Bootstrap Icons sınıfı giriniz.
+                        </small>
+                        <span asp-validation-for="SkillIcon"
+                              class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Açıklama
+                        </label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Bu yetenek hakkındaki kısa açıklamanızı yazınız..."></textarea>
+                        <span asp-validation-for="Description"
+                              class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="DisplayOrder" class="form-label fw-semibold">
+                            Görüntülenme Sırası
+                        </label>
+                        <input asp-for="DisplayOrder"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               value="0" />
+                        <small class="text-muted">
+                            Küçük sayılar önce görüntülenir.
+                        </small>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold d-block">
+                            Yayın Durumu
+                        </label>
+
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="IsActive"
+                                   class="form-check-input"
+                                   type="checkbox"
+                                   role="switch" />
+                            <label asp-for="IsActive" class="form-check-label">
+                                Yetenek aktif olarak yayınlansın
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+
+                    <a asp-area="Admin"
+                       asp-controller="Skill"
+                       asp-action="SkillList"
+                       class="btn btn-light border">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Vazgeç
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Yeteneği Kaydet
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

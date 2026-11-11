@@ -1,0 +1,279 @@
+﻿@model MYAcademy_PortfolioProject.Entities.Project
+
+@{
+    ViewData["Title"] = "Yeni Proje Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    var categories = ViewBag.Categories as List<MYAcademy_PortfolioProject.Entities.Category>
+                     ?? new List<MYAcademy_PortfolioProject.Entities.Category>();
+}
+
+<div class="container-fluid py-4">
+
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Yeni Proje Ekle</h3>
+            <p class="text-muted mb-0">
+                Portföyüne yeni bir proje ekleyebilirsin.
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Project"
+           asp-action="ProjectList"
+           class="btn btn-light border">
+            <i class="bi bi-arrow-left me-2"></i>Proje Listesine Dön
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-white border-0 p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 p-3"
+                             style="background-color:#EEEAFE; color:#8276D9;">
+                            <i class="bi bi-folder-plus fs-4"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="fw-bold mb-1">Proje Bilgileri</h5>
+                            <small class="text-muted">
+                                Proje başlığı, açıklaması ve kategori bilgilerini girin.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-area="Admin"
+                          asp-controller="Project"
+                          asp-action="CreateProject"
+                          method="post"
+                          id="createProjectForm">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"></div>
+
+                        <div class="row g-4">
+
+               
+                            <div class="col-md-6">
+                                <label asp-for="Title" class="form-label fw-semibold">
+                                    Proje Adı
+                                </label>
+
+                                <input asp-for="Title"
+                                       class="form-control"
+                                       placeholder="Örn: FizyoLive" />
+
+                                <span asp-validation-for="Title"
+                                      class="text-danger small"></span>
+                            </div>
+
+                           
+                            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="form-label fw-semibold">
+                                    Proje Kategorisi
+                                </label>
+
+                                <select asp-for="CategoryId" class="form-select">
+                                    <option value="">Kategori Seçiniz</option>
+
+                                    @foreach (var category in categories)
+                                    {
+                                        <option value="@category.CategoryId">
+                                            @category.CategoryName
+                                        </option>
+                                    }
+                                </select>
+
+                                <span asp-validation-for="CategoryId"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            
+                            <div class="col-md-6">
+                                <label asp-for="GithubUrl" class="form-label fw-semibold">
+                                    GitHub Proje Bağlantısı
+                                </label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-github"></i>
+                                    </span>
+
+                                    <input asp-for="GithubUrl"
+                                           class="form-control"
+                                           placeholder="https://github.com/username/project" />
+                                </div>
+
+                                <span asp-validation-for="GithubUrl"
+                                      class="text-danger small"></span>
+                            </div>
+
+                           
+                            <div class="col-md-6">
+                                <label asp-for="CoverImageUrl" class="form-label fw-semibold">
+                                    Proje Kapak Görseli URL
+                                </label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-image"></i>
+                                    </span>
+
+                                    <input asp-for="CoverImageUrl"
+                                           class="form-control"
+                                           id="coverImageUrl"
+                                           placeholder="/images/projects/fizyolive.jpg" />
+                                </div>
+
+                                <span asp-validation-for="CoverImageUrl"
+                                      class="text-danger small"></span>
+                            </div>
+
+                           
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    Görsel Önizleme
+                                </label>
+
+                                <div class="border rounded-3 p-3 text-center bg-light"
+                                     id="imagePreviewContainer">
+
+                                    <img id="coverImagePreview"
+                                         src=""
+                                         alt="Proje görseli önizlemesi"
+                                         style="max-width:100%; max-height:220px; object-fit:contain; display:none;"
+                                         class="rounded-3" />
+
+                                    <div id="imagePlaceholder" class="text-muted py-4">
+                                        <i class="bi bi-image fs-1"></i>
+                                        <p class="mb-0 mt-2">
+                                            Görsel URL'si girildiğinde önizleme burada görünecek.
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    Proje Açıklaması
+                                </label>
+
+                                <textarea asp-for="Description"
+                                          class="form-control"
+                                          rows="5"
+                                          placeholder="Projenin amacını, kullanılan teknolojileri ve özelliklerini açıklayın..."></textarea>
+
+                                <span asp-validation-for="Description"
+                                      class="text-danger small"></span>
+                            </div>
+
+                        </div>
+
+                        <hr class="my-4" />
+
+                       
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-area="Admin"
+                               asp-controller="Project"
+                               asp-action="ProjectList"
+                               class="btn btn-light border px-4">
+                                Vazgeç
+                            </a>
+
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Projeyi Kaydet
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form = document.getElementById("createProjectForm");
+            const imageInput = document.getElementById("coverImageUrl");
+            const imagePreview = document.getElementById("coverImagePreview");
+            const imagePlaceholder = document.getElementById("imagePlaceholder");
+
+        
+            imageInput.addEventListener("input", function () {
+
+                const imageUrl = this.value.trim();
+
+                if (imageUrl) {
+                    imagePreview.src = imageUrl;
+                } else {
+                    imagePreview.style.display = "none";
+                    imagePlaceholder.style.display = "block";
+                }
+
+            });
+
+            imagePreview.addEventListener("load", function () {
+                imagePreview.style.display = "block";
+                imagePlaceholder.style.display = "none";
+            });
+
+            imagePreview.addEventListener("error", function () {
+                imagePreview.style.display = "none";
+                imagePlaceholder.style.display = "block";
+            });
+
+           
+            form.addEventListener("submit", function (e) {
+
+                if (form.dataset.confirmed === "true") {
+                    return;
+                }
+
+                e.preventDefault();
+
+                Swal.fire({
+                    title: "Projeyi eklemek istiyor musunuz?",
+                    text: "Yeni proje portföyünüze eklenecektir.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#8276D9",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Evet, projeyi ekle",
+                    cancelButtonText: "Vazgeç"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        form.dataset.confirmed = "true";
+                        form.requestSubmit();
+                    }
+
+                });
+
+            });
+
+        });
+    </script>
+}

@@ -43,6 +43,7 @@ namespace MYAcademy_PortfolioProject.Areas.Admin.Controllers
             return RedirectToAction("ExperienceList");
         }
 
+        [HttpGet]
         public IActionResult UpdateExperience(int id)
         {
             var value = _context.Experiences.Find(id);

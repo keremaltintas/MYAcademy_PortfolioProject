@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MYAcademy_PortfolioProject.Context;
 using MYAcademy_PortfolioProject.Entities;
 
@@ -14,34 +16,66 @@ namespace MYAcademy_PortfolioProject.Areas.Admin.Controllers
             _context = context;
         }
 
+        // Mesajları listele
         public IActionResult MessageList()
         {
-            var values= _context.Messages.ToList();
+            var values = _context.Messages
+                .OrderByDescending(x => x.SendDate)
+                .ToList();
+
             return View(values);
         }
 
-        public IActionResult CreateMessage()
+        // Mesaj detayını görüntüle
+        public IActionResult MessageDetails(int id)
         {
-            return View();
+            var value = _context.Messages.Find(id);
+
+            if (value == null)
+                return NotFound();
+
+            // Mesaj açıldığında otomatik okundu yap
+            value.IsRead = true;
+            _context.SaveChanges();
+
+            return View(value);
         }
 
+        // Mesajı okunmadı olarak işaretle
         [HttpPost]
-        public IActionResult CreateMessage(Message message)
+        [ValidateAntiForgeryToken]
+        public IActionResult MarkAsUnread(int id)
         {
-            message.SendDate = DateTime.Now;
-            message.IsRead = false;
-            _context.Messages.Add(message);
+            var value = _context.Messages.Find(id);
+
+            if (value == null)
+                return NotFound();
+
+            value.IsRead = false;
             _context.SaveChanges();
+
             return RedirectToAction("MessageList");
         }
 
+        // Mesajı sil
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteMessage(int id)
         {
             var value = _context.Messages.Find(id);
+
+            if (value == null)
+            {
+                TempData["MessageError"] = "Mesaj bulunamadı.";
+                return RedirectToAction(nameof(MessageList));
+            }
+
             _context.Messages.Remove(value);
             _context.SaveChanges();
-            return RedirectToAction("MessageList");
-        }
 
+            TempData["MessageSuccess"] = "Mesaj başarıyla silindi.";
+
+            return RedirectToAction(nameof(MessageList));
+        }
     }
 }

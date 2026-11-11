@@ -1,0 +1,264 @@
+﻿@model List<MYAcademy_PortfolioProject.Entities.Contact>
+
+@{
+    ViewData["Title"] = "İletişim Bilgileri";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">İletişim Yönetimi</h3>
+            <p class="text-muted mb-0">Portfolyonun iletişim bilgilerini buradan yönetebilirsiniz.</p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Contact"
+           asp-action="CreateContact"
+           class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>
+            Yeni İletişim Bilgisi
+        </a>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted">Toplam Kayıt</span>
+                    <h3 class="fw-bold mt-2">@Model.Count</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted">LinkedIn Bilgisi</span>
+                    <h3 class="fw-bold mt-2">
+                        @Model.Count(x => !string.IsNullOrEmpty(x.Linkedin))
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="text-muted">GitHub Bilgisi</span>
+                    <h3 class="fw-bold mt-2">
+                        @Model.Count(x => !string.IsNullOrEmpty(x.Github))
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <h5 class="fw-bold mb-0">İletişim Kayıtları</h5>
+
+                <input type="text"
+                       id="contactSearch"
+                       class="form-control"
+                       style="max-width:300px;"
+                       placeholder="İletişim bilgisi ara..." />
+
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0" id="contactTable">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>E-posta</th>
+                            <th>Konum</th>
+                            <th>LinkedIn</th>
+                            <th>GitHub</th>
+                            <th>Açıklama</th>
+                            <th class="text-end pe-4">İşlemler</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td class="ps-4 fw-semibold">
+                                        #@item.ContactId
+                                    </td>
+
+                                    <td>
+                                        <a href="mailto:@item.Email"
+                                           class="text-decoration-none">
+                                            @item.Email
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <i class="bi bi-geo-alt text-muted me-1"></i>
+                                        @item.Location
+                                    </td>
+
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Linkedin))
+                                        {
+                                            <a href="@item.Linkedin"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-linkedin"></i> LinkedIn
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Github))
+                                        {
+                                            <a href="@item.Github"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="btn btn-sm btn-outline-dark">
+                                                <i class="bi bi-github"></i> GitHub
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                </td>
+
+                                <td>
+                                    <span title="@item.Description">
+                                        @(item.Description?.Length > 35
+                                                                            ? item.Description.Substring(0, 35) + "..."
+                                                                            : item.Description)
+                                </span>
+                            </td>
+
+                                    <td class="text-end pe-4">
+
+                                        <a asp-area="Admin"
+                                           asp-controller="Contact"
+                                           asp-action="UpdateContact"
+                                           asp-route-id="@item.ContactId"
+                                           class="btn btn-sm btn-outline-primary me-1">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <form asp-area="Admin"
+                                              asp-controller="Contact"
+                                              asp-action="DeleteContact"
+                                              method="post"
+                                              class="delete-form d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.ContactId" />
+
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger deleteButton">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+                                                }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    Henüz iletişim kaydı bulunmuyor.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+
+        document.getElementById("contactSearch").addEventListener("keyup", function () {
+
+            const searchValue = this.value.toLowerCase();
+
+            document.querySelectorAll("#contactTable tbody tr").forEach(row => {
+
+                row.style.display = row.innerText.toLowerCase().includes(searchValue)
+                    ? ""
+                    : "none";
+
+            });
+
+        });
+
+
+        document.querySelectorAll(".deleteButton").forEach(button => {
+
+            button.addEventListener("click", function () {
+
+                const form = this.closest(".delete-form");
+
+                Swal.fire({
+                    title: "Emin misiniz?",
+                    text: "Bu iletişim kaydı kalıcı olarak silinecek!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Evet, sil",
+                    cancelButtonText: "Vazgeç"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+}

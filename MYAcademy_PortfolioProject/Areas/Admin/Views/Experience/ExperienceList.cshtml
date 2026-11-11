@@ -13,8 +13,9 @@
         <tr>
             <th>#</th>
             <th>Başlık</th>
+            <th>Şirket</th>
             <th>Alt Başlık</th>
-            <th>Tarih</th>
+            <th>Çalışma Zamanı</th>
             <th>Durum</th>
             <th>Sil</th>
             <th>Güncelle</th>
@@ -24,12 +25,62 @@
             <tr>
                 <td>@item.ExperienceId</td>
                 <td>@item.Title</td>
+                <td>@item.CompanyName</td>
                 <td>@item.SideTitle</td>
+                <td>@item.WorkType</td>
                 <td>@item.Duration</td>
                 <td>@item.IsActive</td>
-                <td><a href="/Admin/Experience/DeleteExperience/@item.ExperienceId" class="btn btn-danger">Sil</a></td>
+                <td>
+                    <form asp-area="Admin"
+                          asp-controller="Experience"
+                          asp-action="DeleteExperience"
+                          asp-route-id="@item.ExperienceId"
+                          method="post"
+                          class="delete-form d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="button" class="btn btn-danger deleteButton">
+                            <i class="bi bi-trash"></i> Sil
+                        </button>
+
+                    </form>
+                </td>
                 <td><a href="/Admin/Experience/UpdateExperience/@item.ExperienceId" class="btn btn-danger">Güncelle</a></td>
             </tr>
         }
     </table>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.querySelectorAll(".deleteButton").forEach(button => {
+
+            button.addEventListener("click", function () {
+
+                const form = this.closest(".delete-form");
+
+                Swal.fire({
+                    title: "Silmek istediğinize emin misiniz?",
+                    text: "Bu deneyim kaydı kalıcı olarak silinecektir!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc3545",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Evet, sil",
+                    cancelButtonText: "Vazgeç"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+
+                });
+
+            });
+
+        });
+    </script>
+}

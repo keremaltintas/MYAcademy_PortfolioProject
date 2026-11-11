@@ -111,32 +111,38 @@
         }
 
         .btn-accent {
-            background: var(--primary-accent);
-            border: 1px solid var(--primary-accent);
-            color: #fff;
-            border-radius: 12px;
+            background-color: #6f62c5 !important;
+            border: 1px solid #6f62c5 !important;
+            color: #ffffff !important;
+            border-radius: 10px;
             font-weight: 600;
-            padding: 9px 20px;
-            box-shadow: 0 4px 12px rgba(130, 118, 217, 0.25);
+            padding: 11px 22px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(111, 98, 197, 0.30);
+            transition: all 0.2s ease;
         }
 
             .btn-accent:hover {
-                background: var(--primary-accent-hover);
-                color: #fff;
+                background-color: #5749ad !important;
+                border-color: #5749ad !important;
+                color: #ffffff !important;
             }
 
         .btn-soft {
-            background: #fff;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            border-radius: 12px;
-            font-weight: 500;
-            padding: 9px 18px;
+            background-color: #e9e6fb !important;
+            border: 1px solid #8276d9 !important;
+            color: #5749ad !important;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 11px 22px;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
 
             .btn-soft:hover {
-                background: #F8F9FD;
-                color: var(--primary-accent);
+                background-color: #d8d2f5 !important;
+                border-color: #6f62c5 !important;
+                color: #453797 !important;
             }
 
         .field-validation-error {
@@ -147,7 +153,7 @@
 }
 
 <div class="form-card">
-    <form asp-area="Admin" asp-action="UpdateExperience" method="post">
+    <form id="updateExperienceForm" asp-area="Admin" asp-action="UpdateExperience" method="post">
         <input type="hidden" asp-for="ExperienceId" />
 
         <div class="form-card-header">
@@ -243,7 +249,7 @@
         </div>
 
         <div class="form-card-footer">
-            <a asp-area="Admin" asp-action="Index" class="btn btn-soft">
+            <a asp-area="Admin" asp-action="ExperienceList" class="btn btn-soft">
                 <i class="bi bi-arrow-left me-1"></i> Vazgeç
             </a>
             <button type="submit" class="btn btn-accent">
@@ -252,3 +258,30 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById("updateButton").addEventListener("click", function () {
+
+            Swal.fire({
+                title: "Değişiklikleri kaydetmek istiyor musunuz?",
+                text: "Deneyim bilgileri güncellenecektir.",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#6f62c5",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Evet, güncelle",
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    document.getElementById("updateExperienceForm").submit();
+                }
+
+            });
+
+        });
+    </script>
+}

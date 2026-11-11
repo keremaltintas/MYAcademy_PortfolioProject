@@ -1,0 +1,198 @@
+﻿@model MYAcademy_PortfolioProject.Entities.Message
+
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Mesaj Detayı</h3>
+            <p class="text-muted mb-0">
+                Ziyaretçiden gelen mesajın detaylarını görüntüleyin.
+            </p>
+        </div>
+
+        <a href="/Admin/Message/MessageList"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>
+            Mesaj Listesine Dön
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Message Information -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center mx-auto mb-3"
+                             style="width:75px;height:75px;">
+                            <i class="bi bi-person-fill fs-1"></i>
+                        </div>
+
+                        <h5 class="fw-bold mb-1">
+                            @Model.NameSurname
+                        </h5>
+
+                        <span class="text-muted small">
+                            Mesaj Gönderen
+                        </span>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-4">
+                        <label class="text-muted small mb-2">
+                            <i class="bi bi-envelope me-2"></i>E-posta Adresi
+                        </label>
+
+                        <div class="fw-semibold text-break">
+                            @Model.Email
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="text-muted small mb-2">
+                            <i class="bi bi-calendar3 me-2"></i>Gönderim Tarihi
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.SendDate.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="text-muted small mb-2">
+                            <i class="bi bi-bookmark me-2"></i>Mesaj Durumu
+                        </label>
+
+                        @if (Model.IsRead)
+                        {
+                            <div>
+                                <span class="badge bg-success-subtle text-success px-3 py-2">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Okundu
+                                </span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-2">
+                                    <i class="bi bi-envelope me-1"></i>
+                                    Okunmadı
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <hr />
+
+                    <a href="mailto:@Model.Email"
+                       class="btn btn-primary w-100">
+                        <i class="bi bi-reply me-2"></i>
+                        E-posta ile Cevapla
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Message Content -->
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white border-0 p-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-3 bg-primary-subtle text-primary p-2">
+                            <i class="bi bi-chat-left-text fs-5"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="fw-bold mb-1">Gelen Mesaj</h5>
+                            <small class="text-muted">
+                                Ziyaretçinin gönderdiği mesaj içeriği
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body px-4 pb-4">
+
+                    <div class="mb-4">
+                        <label class="text-muted small mb-2">
+                            Mesaj Konusu
+                        </label>
+
+                        <h4 class="fw-bold">
+                            @(string.IsNullOrWhiteSpace(Model.Subject)
+                                                        ? "Konu belirtilmemiş"
+                                                        : Model.Subject)
+                        </h4>
+                    </div>
+
+                    <hr />
+
+                    <div class="message-content p-4 rounded-4">
+                        <p class="mb-0 text-dark"
+                           style="white-space: pre-line; line-height: 1.9;">
+                            @Model.MessageDetail
+                        </p>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+
+                        <a href="/Admin/Message/MessageList"
+                           class="btn btn-light border">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            Geri Dön
+                        </a>
+
+                        <form asp-area="Admin"
+                              asp-controller="Message"
+                              asp-action="MarkAsUnread"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.MessageId" />
+
+                            <button type="submit"
+                                    class="btn btn-outline-warning">
+                                <i class="bi bi-envelope me-2"></i>
+                                Okunmadı Olarak İşaretle
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .message-content {
+        background-color: #f6f7fc;
+        border: 1px solid #eceef5;
+        min-height: 220px;
+    }
+</style>

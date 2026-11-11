@@ -1,0 +1,218 @@
+﻿@model MYAcademy_PortfolioProject.Entities.Contact
+
+@{
+    ViewData["Title"] = "İletişim Bilgileri Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">İletişim Bilgileri</h3>
+            <p class="text-muted mb-0">Portfolyonuzda gösterilecek iletişim bilgilerini ekleyin.</p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Contact"
+           asp-action="Index"
+           itemid="createContactForm"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Geri Dön
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-person-lines-fill me-2"></i>
+                Yeni İletişim Kaydı
+            </h5>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="Contact"
+                  asp-action="CreateContact"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="All"
+                     class="text-danger mb-3"></div>
+
+                <div class="row g-4">
+
+                    <!-- E-posta -->
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-semibold">
+                            E-posta Adresi
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   placeholder="ornek@mail.com" />
+                        </div>
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- Konum -->
+                    <div class="col-md-6">
+                        <label asp-for="Location" class="form-label fw-semibold">
+                            Konum
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
+
+                            <input asp-for="Location"
+                                   class="form-control"
+                                   placeholder="Ankara, Türkiye" />
+                        </div>
+
+                        <span asp-validation-for="Location"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- LinkedIn -->
+                    <div class="col-md-6">
+                        <label asp-for="Linkedin" class="form-label fw-semibold">
+                            LinkedIn Profil URL
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-linkedin"></i>
+                            </span>
+
+                            <input asp-for="Linkedin"
+                                   class="form-control"
+                                   placeholder="https://www.linkedin.com/in/..." />
+                        </div>
+
+                        <span asp-validation-for="Linkedin"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- GitHub -->
+                    <div class="col-md-6">
+                        <label asp-for="Github" class="form-label fw-semibold">
+                            GitHub Profil URL
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-github"></i>
+                            </span>
+
+                            <input asp-for="Github"
+                                   class="form-control"
+                                   placeholder="https://github.com/..." />
+                        </div>
+
+                        <span asp-validation-for="Github"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- Açıklama -->
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Açıklama
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="İletişim bölümünde gösterilecek açıklamayı yazınız..."></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- Alt Açıklama -->
+                    <div class="col-12">
+                        <label asp-for="SubDescription" class="form-label fw-semibold">
+                            Alt Açıklama
+                        </label>
+
+                        <textarea asp-for="SubDescription"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="İletişim bölümündeki ek açıklamayı yazınız..."></textarea>
+
+                        <span asp-validation-for="SubDescription"
+                              class="text-danger small"></span>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-area="Admin"
+                       asp-controller="Contact"
+                       asp-action="Index"
+                       class="btn btn-light">
+                        Vazgeç
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Kaydet
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        const form = document.getElementById("createContactForm");
+
+        form.addEventListener("submit", function (e) {
+
+            if (form.dataset.confirmed === "true") {
+                return;
+            }
+
+            e.preventDefault();
+
+            Swal.fire({
+                title: "Kaydetmek istiyor musunuz?",
+                text: "İletişim bilgileri sisteme eklenecek.",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#8276D9",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Evet, kaydet",
+                cancelButtonText: "Vazgeç"
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    form.dataset.confirmed = "true";
+                    form.requestSubmit();
+                }
+
+            });
+
+        });
+    </script>
+}

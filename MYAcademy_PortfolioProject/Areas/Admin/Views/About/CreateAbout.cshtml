@@ -1,0 +1,155 @@
+﻿@model MYAcademy_PortfolioProject.Entities.About
+
+@{
+    ViewData["Title"] = "Yeni Hakkımda Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Yeni Hakkımda Ekle</h3>
+        <p class="text-muted mb-0">
+            Profil bilgilerinizi aşağıdaki form üzerinden ekleyebilirsiniz.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="About"
+                  asp-action="CreateAbout"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NameSurname" class="form-label fw-semibold">
+                            Ad Soyad
+                        </label>
+                        <input asp-for="NameSurname"
+                               class="form-control"
+                               placeholder="Adınız ve soyadınız" />
+                        <span asp-validation-for="NameSurname"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="JobTitle" class="form-label fw-semibold">
+                            Meslek
+                        </label>
+                        <input asp-for="JobTitle"
+                               class="form-control"
+                               placeholder="Örn: Full Stack .NET Developer" />
+                        <span asp-validation-for="JobTitle"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Location" class="form-label fw-semibold">
+                            Konum
+                        </label>
+                        <input asp-for="Location"
+                               class="form-control"
+                               placeholder="Örn: Ankara, Türkiye" />
+                        <span asp-validation-for="Location"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold">
+                            E-posta
+                        </label>
+                        <input asp-for="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="ornek@email.com" />
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label asp-for="Expert" class="form-label fw-semibold">
+                            Uzmanlık Alanları
+                        </label>
+                        <input asp-for="Expert"
+                               class="form-control"
+                               placeholder="Örn: C#, ASP.NET Core, SQL Server" />
+                        <span asp-validation-for="Expert"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            Hakkımda Açıklaması
+                        </label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Kendiniz hakkında kısa bir açıklama yazın..."></textarea>
+                        <span asp-validation-for="Description"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CvFileUrl" class="form-label fw-semibold">
+                            CV Dosya Yolu
+                        </label>
+                        <input asp-for="CvFileUrl"
+                               class="form-control"
+                               placeholder="/uploads/cv/cv.pdf" />
+                        <span asp-validation-for="CvFileUrl"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3 d-flex align-items-center">
+                        <div class="form-check mt-4">
+                            <input asp-for="OpenToWork"
+                                   class="form-check-input" />
+                            <label asp-for="OpenToWork"
+                                   class="form-check-label fw-semibold">
+                                İş fırsatlarına açığım
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-area="Admin"
+                       asp-controller="About"
+                       asp-action="Index"
+                       class="btn btn-light">
+                        Vazgeç
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Kaydet
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+}

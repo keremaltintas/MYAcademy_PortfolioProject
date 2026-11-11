@@ -1,0 +1,154 @@
+﻿@model List<MYAcademy_PortfolioProject.Entities.Education>
+@{
+    ViewData["Title"] = "EducationList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="data-table-card">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 p-4 border-bottom">
+            <div>
+                <h4 class="fw-bold mb-1">Eğitim Bilgileri</h4>
+                <p class="text-muted mb-0 small">
+                    Eğitim geçmişinizi buradan yönetebilirsiniz.
+                </p>
+            </div>
+
+            <a href="/Admin/Education/CreateEducation" class="btn btn-success">
+                <i class="bi bi-plus-lg me-2"></i>Yeni Eğitim Ekle
+            </a>
+        </div>
+
+        <div class="px-4 py-3 d-flex justify-content-between align-items-center">
+            <span class="text-muted small">
+                Toplam <strong>@Model.Count()</strong> eğitim kaydı
+            </span>
+            <i class="bi bi-mortarboard text-muted fs-4"></i>
+        </div>
+
+        <div class="table-responsive px-4 pb-4">
+            <table class="table align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>EĞİTİM BİLGİSİ</th>
+                        <th>OKUL / ÜNİVERSİTE</th>
+                        <th>AÇIKLAMA</th>
+                        <th>SÜRE</th>
+                        <th class="text-end">İŞLEMLER</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="education-icon">
+                                        <i class="bi bi-mortarboard"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@item.Title</div>
+                                        <small class="text-muted">
+                                            Eğitim #@item.EducationId
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="fw-medium">
+                                    <i class="bi bi-building me-2"></i>
+                                    @item.SubTitle
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="description-text" title="@item.Description">
+                                    @item.Description
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="duration-badge">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    @item.Duration
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="education-actions">
+
+                                    <a href="/Admin/Education/UpdateEducation/@item.EducationId"
+                                       class="education-btn education-btn-edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                        Düzenle
+                                    </a>
+
+                                    <form action="/Admin/Education/DeleteEducation/@item.EducationId"
+                                          method="post"
+                                          class="delete-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="button"
+                                                class="education-btn education-btn-delete deleteButton">
+                                            <i class="bi bi-trash3"></i>
+                                            Sil
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="bi bi-mortarboard display-5 text-muted"></i>
+                                <h6 class="fw-bold mt-3">Henüz eğitim kaydı bulunmuyor.</h6>
+                                <p class="text-muted small mb-0">
+                                    Yeni Eğitim Ekle butonuyla kayıt oluşturabilirsiniz.
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.querySelectorAll(".deleteButton").forEach(button => {
+            button.addEventListener("click", function () {
+                const form = this.closest(".delete-form");
+
+                Swal.fire({
+                    title: "Eğitimi silmek istiyor musunuz?",
+                    text: "Bu işlem geri alınamaz.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc3545",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Evet, sil",
+                    cancelButtonText: "Vazgeç"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}
